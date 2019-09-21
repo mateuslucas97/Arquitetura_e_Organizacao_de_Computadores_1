@@ -1,0 +1,28 @@
+# Reading C:/altera/13.0sp1/modelsim_ase/tcl/vsim/pref.tcl 
+# Loading project flipflopd
+# Compile of flipflopd.v was successful.
+vsim -gui work.exercicio
+# vsim -gui work.exercicio 
+# Loading work.exercicio
+wave create -driver freeze -pattern clock -initialvalue HiZ -period 80ps -dutycycle 50 -starttime 0ps -endtime 1000ps sim:/exercicio/clock
+wave create -driver freeze -pattern clock -initialvalue HiZ -period 100ps -dutycycle 50 -starttime 0ps -endtime 1000ps sim:/exercicio/d
+add wave -position end  sim:/exercicio/q
+run
+wave editwrite -file C:/altera/13.0sp1/wave_ffd.do
+# Compile of flipflopd.v was successful.
+# Closing project C:/altera/13.0sp1/flipflopd.mpf
+# reading C:\altera\13.0sp1\modelsim_ase\win32aloem/../modelsim.ini
+# Loading project latch_d
+# Compile of latch_d.v was successful.
+vsim -gui work.latch_d
+# vsim -gui work.latch_d 
+# Loading work.latch_d
+wave create -driver freeze -pattern clock -initialvalue HiZ -period 100ps -dutycycle 50 -starttime 0ps -endtime 1000ps sim:/latch_d/d
+# exercicio
+wave create -driver freeze -pattern clock -initialvalue HiZ -period 80ps -dutycycle 50 -starttime 0ps -endtime 1000ps sim:/latch_d/en
+# exercicio
+wave create -driver freeze -pattern clock -initialvalue HiZ -period 80ps -dutycycle 50 -starttime 0ps -endtime 1000ps sim:/latch_d/rstn
+# exercicio
+add wave -position end  sim:/latch_d/q
+run
+wave editwrite -file C:/altera/13.0sp1/wave_latch_d.do

@@ -1,0 +1,10 @@
+C:/Users/Aluno/Desktop/bancoreg/bancoreg.v {0 {vlog -work work {C:\Users\Aluno\Desktop\bancoreg\bancoreg.v}
+Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+-- Compiling module multiplexador
+-- Compiling module registrador
+-- Compiling module decodificador
+-- Compiling module bancoreg
+** Error: C:\Users\Aluno\Desktop\bancoreg\bancoreg.v(61): (vlog-2730) Undefined variable: 'saida_dec'.
+
+
+} {7.0 8.0} {}}
