@@ -1,0 +1,15 @@
+C:/Users/aluno-ccc/Desktop/multiplicador/somador.v {1 {vlog -work work {C:\Users\aluno-ccc\Desktop\multiplicador\somador.v}
+Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+-- Compiling module somador
+
+Top level modules:
+	somador
+
+} {} {}} C:/Users/aluno-ccc/Desktop/multiplicador/multiplicador.v {1 {vlog -work work {C:\Users\aluno-ccc\Desktop\multiplicador\multiplicador.v}
+Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+-- Compiling module multiplicador
+
+Top level modules:
+	multiplicador
+
+} {} {}}
