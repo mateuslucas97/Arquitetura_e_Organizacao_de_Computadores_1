@@ -1,0 +1,15 @@
+module registrador (input [15:0] dado, 
+                    input clock, habilita_escrita, 
+                    output reg [15:0] saida);
+                    
+  always @(posedge clock, posedge habilita_escrita)
+    begin
+      if(habilita_escrtia == 1) begin
+          saida = 0;
+      end
+        else begin
+          saida = dado;
+        end
+      end
+      
+    endmodule
