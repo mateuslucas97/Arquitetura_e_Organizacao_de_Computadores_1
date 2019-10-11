@@ -1,0 +1,120 @@
+m255
+K3
+13
+cModel Technology
+Z0 dC:\Users\Aluno\Desktop\somadorFloat
+valu
+!i10b 1
+Z1 !s100 ZB]`JXFjhGgFT1Ol3[?3c2
+Z2 IR]C@NI216?6KD`[CaLRV?1
+Z3 VhN59za;@91loLgzf;nLT[0
+Z4 dC:\Users\Aluno\Desktop\data_path2
+Z5 w1570209183
+Z6 8C:/Users/Aluno/Desktop/data_path2/data_path2.v
+Z7 FC:/Users/Aluno/Desktop/data_path2/data_path2.v
+L0 3
+Z8 OV;L;10.1d;51
+r1
+!s85 0
+31
+Z9 !s108 1570209185.059000
+Z10 !s107 C:/Users/Aluno/Desktop/data_path2/data_path2.v|
+Z11 !s90 -reportprogress|300|-work|work|C:/Users/Aluno/Desktop/data_path2/data_path2.v|
+!s101 -O0
+Z12 o-work work -O0
+vdata_memory
+!i10b 1
+Z13 !s100 <kcGG4lT947@ll:^;h8dB1
+Z14 I9BkNF;L8FWEcObOIN>=[91
+Z15 Vj78C70K6UeMLe^aG?U>8l0
+R4
+R5
+R6
+R7
+L0 81
+R8
+r1
+!s85 0
+31
+R9
+R10
+R11
+!s101 -O0
+R12
+vdata_path2
+!i10b 1
+!s100 ;JP_g53Yj7fD`4aQd[RCz2
+IKhzF]>Q4@8fV^_YMf7^Jd3
+V=el2Y4>0Nj`VmIzQfQ1M]0
+R4
+R5
+R6
+R7
+Z16 L0 150
+R8
+r1
+!s85 0
+31
+R9
+R10
+R11
+!s101 -O0
+R12
+vinstr_mem
+!i10b 1
+Z17 !s100 JUzoYoI=IG0=Y<ZBlA@mV2
+Z18 IJSnVDSD:7^ASk7::^B9E61
+Z19 VdU9djim2G;774^;S:=K1U3
+R4
+R5
+R6
+R7
+L0 45
+R8
+r1
+!s85 0
+31
+R9
+R10
+R11
+!s101 -O0
+R12
+vJR_Control
+!i10b 1
+Z20 !s100 ;KGG0b2L^67^@fmZTA[?;2
+Z21 I46DFGI?o88WCVnn_GdL973
+Z22 V@E`kD]Okg=<c==?ZHSg5W3
+R4
+R5
+R6
+R7
+L0 34
+R8
+r1
+!s85 0
+31
+R9
+R10
+R11
+!s101 -O0
+R12
+Z23 n@j@r_@control
+vregister_file
+!i10b 1
+Z24 !s100 6HVNA[fS=iegl:>Pe^EA:0
+Z25 IDUI24`j1WcKVh?:k_;3<30
+Z26 VMBSYBm90a0bIV6b8^nBA=1
+R4
+R5
+R6
+R7
+Z27 L0 111
+R8
+r1
+!s85 0
+31
+R9
+R10
+R11
+!s101 -O0
+R12

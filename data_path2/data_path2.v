@@ -1,0 +1,243 @@
+//ULA
+
+module alu(     
+      input [15:0] a,           
+      input [15:0] b,            
+      input [2:0] alu_control,       
+      output reg [15:0] result,               
+      output zero  
+   );
+  
+ always @(*)  
+ begin
+   
+      case(alu_control)
+  
+      3'b000: result = a + b; // add  
+      3'b001: result = a - b; // sub  
+      3'b010: result = a & b; // and  
+      3'b011: result = a | b; // or      
+      3'b100: begin if (a<b) result = 16'd1;
+  
+                     else result = 16'd0;
+  
+                     end
+      default:result = a + b; // add  
+      endcase
+  
+ end
+  
+ assign zero = (result==16'd0) ? 1'b1: 1'b0;
+  
+ endmodule
+ 
+module JR_Control( input alu_op,
+                   input [3:0] funct,
+                   output JRControl
+    );
+
+assign JRControl = ({alu_op,funct}==6'b001000) ? 1'b1 : 1'b0;
+
+endmodule
+
+
+//PC e Instruction Memory
+module instr_mem  (
+        input [15:0] pc,  
+        output wire [15:0] instruction  
+ );
+  
+      wire [3:0] rom_addr = pc[4:1];  
+        
+      reg [15:0] rom[15:0];
+  
+      initial  
+      begin
+  
+                rom[0] = 16'b1000000110000000;  
+                rom[1] = 16'b0010110010110010;  
+                rom[2] = 16'b1101110001100111;  
+                rom[3] = 16'b1101110111011001;  
+                rom[4] = 16'b1111110110110001;  
+                rom[5] = 16'b1100000001111011;
+                rom[6] = 16'b0000000000000000;
+                rom[7] = 16'b0000000000000000;
+                rom[8] = 16'b0000000000000000;
+                rom[9] = 16'b0000000000000000; 
+                rom[10] = 16'b0000000000000000; 
+                rom[11] = 16'b0000000000000000;  
+                rom[12] = 16'b0000000000000000; 
+                rom[13] = 16'b0000000000000000;  
+                rom[14] = 16'b0000000000000000;  
+                rom[15] = 16'b0000000000000000;
+  
+      end
+  
+      assign instruction = (pc[15:0] < 32 )? rom[rom_addr[3:0]]: 16'd0;
+  
+ endmodule
+ 
+ 
+module data_memory (  
+      input clk,  
+      // address input, shared by read and write port
+      input [15:0] mem_access_addr,  
+        // write port
+      input [15:0] mem_write_data,
+      input mem_write_en,
+      input mem_read,
+      // read port
+      output [15:0] mem_read_data  
+ );
+  
+      integer i;
+      reg [15:0] ram [255:0];
+      wire [7:0] ram_addr = mem_access_addr[8:1];
+      initial begin
+           for(i=0;i<256;i=i+1)
+                ram[i] <= 16'd0;
+      end
+  
+      always @(posedge clk) begin
+           if (mem_write_en)
+                ram[ram_addr] <= mem_write_data;
+      end
+  
+      assign mem_read_data = (mem_read==1'b1) ? ram[ram_addr]: 16'd0;
+   
+ endmodule
+
+
+module register_file(  
+      input clk,  
+      input rst,  
+      // write port  
+      input reg_write_en,  
+      input [2:0] reg_write_dest,  
+      input  reg_write_data,  
+      //read port 1  
+      input [2:0] reg_read_addr_1,  
+      output [15:0]reg_read_data_1,  
+      //read port 2  
+      input [2:0] reg_read_addr_2,  
+      output [15:0] reg_read_data_2  
+ );
+   
+      reg [15:0] reg_array [7:0];  
+       
+      always @ (posedge clk or posedge rst) begin  
+           if(rst) begin  
+                reg_array[0] <= 16'b0;  
+                reg_array[1] <= 16'b0;  
+                reg_array[2] <= 16'b0;  
+                reg_array[3] <= 16'b0;  
+                reg_array[4] <= 16'b0;  
+                reg_array[5] <= 16'b0;  
+                reg_array[6] <= 16'b0;  
+                reg_array[7] <= 16'b0;       
+           end  
+           else begin  
+                if(reg_write_en) begin  
+                     reg_array[reg_write_dest] <= reg_write_data;  
+                end  
+           end  
+      end  
+      assign reg_read_data_1 = ( reg_read_addr_1 == 0)? 16'b0 : reg_array[reg_read_addr_1];  
+      assign reg_read_data_2 = ( reg_read_addr_2 == 0)? 16'b0 : reg_array[reg_read_addr_2];  
+ endmodule
+ 
+ 
+module data_path2(input clk,reset,
+                   reg_dst,mem_to_reg,alu_op,
+                   reg_write_data,
+                  jump,branch,mem_read,mem_write,alu_src,reg_write, input [15:0] pc_current  
+                    
+   ); 
+     
+   
+ wire signed[15:0] pc_next,pc2;  
+ wire [15:0] instr;     
+ wire [2:0] reg_write_dest;     
+ wire [2:0] reg_read_addr_1;  
+ wire [15:0] reg_read_data_1;  
+ wire [2:0] reg_read_addr_2;  
+ wire [15:0] reg_read_data_2;  
+ wire [15:0] sign_ext_im,read_data2,zero_ext_im,imm_ext;  
+ wire JRControl;  
+ wire [2:0] ALU_Control;  
+ wire [15:0] ALU_out;  
+ wire zero_flag;  
+ wire signed[15:0] im_shift_1, PC_j, PC_beq, PC_4beq,PC_4beqj,PC_jr;  
+ wire beq_control;  
+ wire [14:0] jump_shift_1;  
+ wire [15:0]mem_read_data;  
+ wire [15:0] no_sign_ext;  
+ wire sign_or_zero;  
+ // PC   
+   
+           assign pc_current = {pc_current, 16'd0};  
+     
+           assign pc_current = {pc_current,pc_next};  
+   
+ // PC + 2   
+ assign pc2 = pc_current + 16'd2;  
+ // instruction memory  
+ instr_mem instrucion_memory(.pc(pc_current),.instruction(instr));  
+ // jump shift left 1  
+ assign jump_shift_1 = {instr[13:0],1'b0};  
+   
+ // multiplexer regdest  
+ assign reg_write_dest = (reg_dst==2'b10) ? 3'b111: ((reg_dst==2'b01) ? instr[6:4] :instr[9:7]);  
+ // register file  
+ assign reg_read_addr_1 = instr[12:10];  
+ assign reg_read_addr_2 = instr[9:7];  
+ register_file reg_file(.clk(clk),.rst(reset),
+ .reg_write_en(reg_write),
+ .reg_write_dest(reg_write_dest),
+ .reg_write_data(reg_write_data),
+ .reg_read_addr_1(reg_read_addr_1),
+ .reg_read_data_1(reg_read_data_1),
+ .reg_read_addr_2(reg_read_addr_2),
+ .reg_read_data_2(reg_read_data_2));  
+ // sign extend  
+ assign sign_ext_im = {{9{instr[6]}},instr[6:0]};  
+ assign zero_ext_im = {{9{1'b0}},instr[6:0]};  
+ assign imm_ext = (sign_or_zero==1'b1) ? sign_ext_im : zero_ext_im;  
+ // JR control  
+ JR_Control JRControl_unit(.alu_op(alu_op),.funct(instr[3:0]),.JRControl(JRControl));       
+   
+ // multiplexer alu_src  
+ assign read_data2 = (alu_src==1'b1) ? imm_ext : reg_read_data_2;  
+ // ALU   
+ alu alu_unit(.a(reg_read_data_1),.b(read_data2),.alu_control(ALU_Control),.result(ALU_out),.zero(zero_flag));  
+ // immediate shift 1  
+ assign im_shift_1 = {imm_ext[14:0],1'b0};  
+ //  
+ assign no_sign_ext = ~(im_shift_1) + 1'b1;  
+ // PC beq add  
+ assign PC_beq = (im_shift_1[15] == 1'b1) ? (pc2 - no_sign_ext): (pc2 +im_shift_1);  
+ // beq control  
+ assign beq_control = branch & zero_flag;  
+ // PC_beq  
+ assign PC_4beq = (beq_control==1'b1) ? PC_beq : pc2;  
+ // PC_j  
+ assign PC_j = {pc2[15],jump_shift_1};  
+ // PC_4beqj  
+ assign PC_4beqj = (jump == 1'b1) ? PC_j : PC_4beq;  
+ // PC_jr  
+ assign PC_jr = reg_read_data_1;  
+ // PC_next  
+ assign pc_next = (JRControl==1'b1) ? PC_jr : PC_4beqj;  
+ // data memory  
+ data_memory datamem(.clk(clk),.mem_access_addr(ALU_out),
+ .mem_write_data(reg_read_data_2),
+ .mem_write_en(mem_write),
+ .mem_read(mem_read),
+ .mem_read_data(mem_read_data));  
+ // write back  
+ assign reg_write_data = (mem_to_reg == 2'b10) ? pc2:((mem_to_reg == 2'b01)? mem_read_data: ALU_out);  
+ // output  
+ assign pc_out = pc_current;  
+ assign alu_result = ALU_out;  
+ endmodule
+

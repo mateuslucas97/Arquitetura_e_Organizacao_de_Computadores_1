@@ -1,0 +1,13 @@
+C:/Users/Aluno/Desktop/data_path2/data_path2.v {1 {vlog -work work C:/Users/Aluno/Desktop/data_path2/data_path2.v
+Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+-- Compiling module alu
+-- Compiling module JR_Control
+-- Compiling module instr_mem
+-- Compiling module data_memory
+-- Compiling module register_file
+-- Compiling module data_path2
+
+Top level modules:
+	data_path2
+
+} {} {}}
